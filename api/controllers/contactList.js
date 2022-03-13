@@ -21,13 +21,21 @@ module.exports.new_contact_from_memory = (req, res, next) => {
       })
       // merge all contacts into one large pool
       console.log("Merging all contacts", _.size(cleaned))
-      var xls = json2xls(_.sortBy(cleaned, ['name', 'firstname', 'lastname']));
+      const data = [
+        {
+          "Name": "--- ---",
+          "Phone 1 - Value": "--- ---",
+          "Phone 2 - Value": "--- ---",
+          "Email": "--- ---",
+        }
+        , ..._.sortBy(cleaned, ['Name'])]
+      var xls = json2xls(data);
       const fileName = `./output/CONTACT_LIST_${moment().format("YYYYMMDDhhmmss")}.xlsx`
       fs.writeFileSync(fileName, xls, 'binary');
       res.status(200).json({
         message: `Successfully extracted ${_.size(cleaned)} contacts from ${_.size(contacts)} contact files`,
         details: `File exported to ${fileName}`,
-        // contacts: _.sortBy(cleaned, ['name', 'firstname', 'lastname'])
+        contacts: data
       })
     });
   } catch (error) {
