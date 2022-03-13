@@ -1,0 +1,4 @@
+node_modules
+.env
+/api/constants/data/contacts/*
+/output/*
